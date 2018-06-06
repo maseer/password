@@ -1,4 +1,4 @@
-package bcrypt
+package password
 
 import "encoding/base64"
 

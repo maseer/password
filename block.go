@@ -1,4 +1,4 @@
-package blowfish
+package password
 
 func getNextWord(b []byte, pos *int) uint32 {
 	var w uint32

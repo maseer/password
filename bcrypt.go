@@ -1,4 +1,4 @@
-package bcrypt
+package password
 
 import (
 	"crypto/rand"
@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-
-	"../blowfish"
 )
 
 const (
@@ -198,7 +196,7 @@ func bcrypt(password []byte, cost int, salt []byte) ([]byte, error) {
 	return hsh, nil
 }
 
-func expensiveBlowfishSetup(key []byte, cost uint32, salt []byte) (*blowfish.Cipher, error) {
+func expensiveBlowfishSetup(key []byte, cost uint32, salt []byte) (*Cipher, error) {
 	csalt, err := base64Decode(salt)
 	if err != nil {
 		return nil, err
@@ -209,7 +207,7 @@ func expensiveBlowfishSetup(key []byte, cost uint32, salt []byte) (*blowfish.Cip
 	// We copy the key to prevent changing the underlying array.
 	ckey := append(key[:len(key):len(key)], 0)
 
-	c, err := blowfish.NewSaltedCipher(ckey, csalt)
+	c, err := NewSaltedCipher(ckey, csalt)
 	if err != nil {
 		return nil, err
 	}
@@ -217,8 +215,8 @@ func expensiveBlowfishSetup(key []byte, cost uint32, salt []byte) (*blowfish.Cip
 	var i, rounds uint64
 	rounds = 1 << cost
 	for i = 0; i < rounds; i++ {
-		blowfish.ExpandKey(ckey, c)
-		blowfish.ExpandKey(csalt, c)
+		ExpandKey(ckey, c)
+		ExpandKey(csalt, c)
 	}
 
 	return c, nil

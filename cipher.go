@@ -1,4 +1,4 @@
-package blowfish
+package password
 
 import "strconv"
 
